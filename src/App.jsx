@@ -1,27 +1,32 @@
 import { useState } from "react";
 
 function App() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    cnfmPassword: "",
+  });
 
   const onSubmitForm = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
-    const name = e.target.elements.name.value.trim();
-    const email = e.target.elements.email.value.trim();
-    const pass = e.target.elements.pass.value;
-    const cnfmpass = e.target.elements.cnfmpass.value;
-
-    if (pass !== cnfmpass) {
-      console.log("Passwords don't match");
+    if (!formData.name || !formData.email || !formData.password) {
+      alert("All fields are required!");
+      return;
+    }
+    if (formData.password !== formData.cnfmPassword) {
+      alert("Passwords do not match!");
       return;
     }
 
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", pass);
+    console.log("Form submitted successfully:", formData);
+
+    setFormData({ name: "", email: "", password: "", cnfmPassword: "" });
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -29,16 +34,40 @@ function App() {
       <h1>Register Here</h1>
       <form onSubmit={onSubmitForm}>
         <label>Enter Name: </label>
-        <input type="text" name="name" placeholder="Name" />
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          onChange={handleChange}
+          value={formData.name}
+        />
         <br />
         <label>Enter Email: </label>
-        <input type="email" name="email" placeholder="Email" />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          onChange={handleChange}
+          value={formData.email}
+        />
         <br />
         <label>Enter Password: </label>
-        <input type="password" name="pass" placeholder="Password" />
+        <input
+          type="password"
+          name="password"
+          onChange={handleChange}
+          placeholder="Password"
+          value={formData.password}
+        />
         <br />
         <label>Confirm Password: </label>
-        <input type="password" name="cnfmpass" placeholder="Confirm Password" />
+        <input
+          type="password"
+          name="cnfmPassword"
+          placeholder="Confirm Password"
+          value={formData.cnfmPassword}
+          onChange={handleChange}
+        />
         <br />
         <button type="submit">Submit</button>
       </form>
